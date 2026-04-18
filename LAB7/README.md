@@ -1,59 +1,84 @@
 # LAB 7: CUDA Programming Assignment
 
-This lab focuses on three small CUDA programs that demonstrate how GPU threads, parallel algorithms, and memory behavior affect performance. The notebook builds and runs each solution separately, then records the output for comparison.
+This assignment uses three CUDA problems to show how GPU threads can be assigned different work, how data can be processed in parallel across many threads, and how memory movement affects measured performance. The notebook runs each task separately and records the output for validation.
 
-## What This Assignment Covers
+## Assignment Goals
 
-- Task-based work distribution across CUDA threads
-- Parallel merge sort using a bottom-up approach
-- Vector addition with timing and bandwidth analysis
-- Basic performance interpretation using CUDA profiling tools
+- Show how a CUDA kernel can assign different work to different threads
+- Demonstrate a parallel merge sort workflow built from repeated merge passes
+- Measure vector addition performance and compare it with theoretical bandwidth
+- Use profiling output to interpret kernel execution and memory activity
 
-## Assignment Structure
+## Assignment at a Glance
 
-| Problem   | Focus                   | Main Idea                                                                             |
-| --------- | ----------------------- | ------------------------------------------------------------------------------------- |
-| Problem 1 | Thread-level task split | Two CUDA threads compute the same sum in different ways and verify the result matches |
-| Problem 2 | Parallel sorting        | A bottom-up merge sort merges array segments across GPU threads                       |
-| Problem 3 | Memory throughput       | A vector-add kernel is timed and compared with theoretical bandwidth                  |
+| Problem   | Focus                   | What It Demonstrates                                                                        |
+| --------- | ----------------------- | ------------------------------------------------------------------------------------------- |
+| Problem 1 | Thread-level task split | Two CUDA threads compute the same sum using different methods and verify the result matches |
+| Problem 2 | Parallel sorting        | A bottom-up merge sort combines array segments across GPU threads                           |
+| Problem 3 | Memory throughput       | A vector-add kernel is timed and compared with theoretical bandwidth                        |
 
-## High-Level Workflow
+## Overall Workflow
 
 ```mermaid
-flowchart LR
+flowchart TD
     A[Assignment 7 Notebook] --> B[Problem 1]
     A --> C[Problem 2]
     A --> D[Problem 3]
 
-    B --> B1[Two threads perform different sum methods]
-    C --> C1[GPU merges array segments step by step]
-    D --> D1[Vector add kernel is timed and profiled]
+    B --> B1[Run two different sum strategies]
+    C --> C1[Merge array segments in passes]
+    D --> D1[Time vector addition and profile memory]
 
-    B1 --> E[Results and validation]
+    B1 --> E[Check correctness]
     C1 --> E
     D1 --> E
 ```
 
-## Problem Summary
+## Detailed Problem Breakdown
 
 ### Problem 1: Diverse Tasks in CUDA Threads
 
-This problem shows that different threads in a CUDA kernel can execute different work based on thread ID. One thread computes the sum iteratively, while another uses the arithmetic formula. The goal is to confirm both approaches produce the same final value.
+This problem uses a very small kernel to show that thread identity can control behavior inside the same launch. One thread computes the sum of numbers iteratively, while another thread computes the same result with the arithmetic formula. The purpose is to confirm that both approaches produce the same answer and to show how a kernel can branch by thread ID when tasks are independent.
+
+What to observe:
+
+- Both methods should return the same final sum
+- The result acts as a correctness check for the kernel
+- The example shows how different CUDA threads can take on different roles within one launch
 
 ### Problem 2: Parallel Merge Sort
 
-This problem uses a bottom-up merge sort strategy. Each pass merges increasingly larger sorted segments until the full array is sorted. The emphasis is on how GPU threads can cooperate to process many merge operations in parallel.
+This problem implements a bottom-up merge sort pattern. Instead of sorting everything in one step, the array is merged in stages: small sorted ranges are combined first, then larger ranges, and so on until the entire array is ordered. The idea is to demonstrate a classic divide-and-merge workflow on the GPU.
+
+What to observe:
+
+- The array becomes increasingly more sorted after each merge pass
+- The output preview should show values in ascending order
+- The approach highlights how repeated kernel launches can build a complete sorting algorithm
 
 ### Problem 3: Vector Addition and Bandwidth Analysis
 
-This problem measures the runtime of a large vector addition kernel and compares measured bandwidth with the GPU's theoretical memory bandwidth. It highlights the difference between raw hardware capability and real kernel performance.
+This problem focuses on performance measurement rather than algorithm complexity. A large vector addition kernel is executed, and its runtime is used to estimate bandwidth. The measured value is then compared with the GPU's theoretical memory bandwidth to show the difference between peak capability and real application performance.
 
-## Key Observations
+What to observe:
 
-- Problem 1 validates that both sum methods return the same result.
-- Problem 2 demonstrates a working GPU-based merge process on an unsorted array.
-- Problem 3 shows how timing data can be converted into an approximate bandwidth estimate.
-- The notebook also uses profiling output to give a basic performance view of kernel and memory activity.
+- The kernel execution time reported by CUDA timing functions
+- The theoretical bandwidth computed from device properties
+- The measured bandwidth calculated from the amount of data processed during the kernel
+- The profiling output that shows how much time is spent in kernel execution versus data transfer
+
+## Key Takeaways
+
+- CUDA thread IDs can be used to split work cleanly across independent tasks
+- A bottom-up merge strategy is a practical way to express sorting in stages
+- Memory bandwidth measurements are useful for understanding real GPU performance
+- Profiling helps separate kernel behavior from host-device transfer overhead
+
+## Expected Results
+
+- Problem 1 should report matching sums from both methods
+- Problem 2 should print a sorted preview of the data after execution
+- Problem 3 should report kernel time, theoretical bandwidth, and measured bandwidth
 
 ## Deliverables
 
@@ -63,6 +88,6 @@ This problem measures the runtime of a large vector addition kernel and compares
 
 ## Notes
 
-- The notebook is intended for a CUDA-enabled environment.
-- The README focuses on the assignment narrative and avoids reproducing code.
-- If you want, this file can be expanded later with screenshots of outputs or a results summary table.
+- The notebook is intended for a CUDA-enabled environment
+- The README is intentionally code-free and focuses on the assignment narrative
+- Screenshots or a short results table can be added later if needed
