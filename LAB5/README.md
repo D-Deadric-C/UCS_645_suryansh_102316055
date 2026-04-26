@@ -525,62 +525,6 @@ Master processes:
 
 ---
 
-## Compilation & Execution
-
-### Compilation
-```bash
-cd LAB5
-
-# Compile all programs
-mpicc -Wall -std=c99 -lm -o daxpy daxpy.c
-mpicc -Wall -std=c99 -lm -o broadcast_race broadcast_race.c
-mpicc -Wall -std=c99 -lm -o dot_product_amdahl dot_product_amdahl.c
-mpicc -Wall -std=c99 -lm -o prime_finder prime_finder.c
-mpicc -Wall -std=c99 -lm -o perfect_numbers perfect_numbers.c
-
-# Or use Makefile
-make all
-```
-
-### Running Programs
-```bash
-# Single runs
-mpirun -np 4 ./daxpy
-mpirun -np 4 ./broadcast_race
-mpirun -np 4 ./dot_product_amdahl
-mpirun -np 4 ./prime_finder
-mpirun -np 4 ./perfect_numbers
-
-# Performance testing with multiple process counts
-mpirun -np 1 ./daxpy
-mpirun -np 2 ./daxpy
-mpirun -np 4 ./daxpy
-mpirun -np 8 ./daxpy
-
-# Test broadcast with varying sizes
-for np in 2 4 8 16; do
-  echo "Running with $np processes"
-  mpirun -np $np ./broadcast_race
-done
-```
-
-### Using Makefile Targets
-```bash
-make run-daxpy          # Run Q1 (4 processes)
-make run-broadcast      # Run Q2 (4 processes)
-make run-dot-product    # Run Q3 (4 processes)
-make run-prime          # Run Q4 (4 processes)
-make run-perfect        # Run Q5 (4 processes)
-
-make test-daxpy         # Test Q1 with 1,2,4,8 processes
-make test-broadcast     # Test Q2 with 2,4,8,16 processes
-make test-dot-product   # Test Q3 with 1,2,4,8 processes
-
-make clean              # Remove compiled programs
-```
-
----
-
 ## Performance Analysis & Reporting
 
 ### Data Collection Template
@@ -663,21 +607,3 @@ After completing these exercises, you will understand:
 ✓ **Performance Analysis**: Creating graphs and identifying bottlenecks  
 
 ---
-
-## Common Performance Issues & Solutions
-
-| Problem | Cause | Solution |
-|---------|-------|----------|
-| Low speedup | High communication overhead | Increase computation per message |
-| Uneven load | Dynamic work assignment issues | Better load balancing strategy |
-| Scalability ceiling | Communication dominates | Use faster network or larger problem |
-| Unexpected slowdown | Cache/memory effects | Profile with system tools |
-| Linear broadcast slower than MPI_Bcast | Obvious! | Use optimized collective ops |
-
----
-
-## References
-- MPI Standard: https://www.mpi-forum.org/
-- Amdahl's Law: Understanding parallel speedup limits
-- OpenMPI: https://www.open-mpi.org/doc/
-- Performance Analysis: Tau, Scalasca, or built-in MPI tools
