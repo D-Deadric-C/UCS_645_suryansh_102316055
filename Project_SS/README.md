@@ -1,4 +1,4 @@
-#Architecture-Aware Evaluation of Range Query Processing: Mo\'s Algorithm vs GPU Parallelization
+## Architecture-Aware Evaluation of Range Query Processing: Mo\'s Algorithm vs GPU Parallelization
 
 ![C++](https://img.shields.io/badge/C%2B%2B-17-blue.svg)
 ![CUDA](https://img.shields.io/badge/CUDA-Warp%20Level%20Parallelism-green.svg)
